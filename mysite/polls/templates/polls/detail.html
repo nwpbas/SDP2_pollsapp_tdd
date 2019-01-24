@@ -8,5 +8,19 @@
     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
 {% endfor %}
-<input type="submit" value="Vote">
+    <input type="submit" value="Vote">
 </form>
+
+<br>
+<p><b>Select choice to delete</b></p>
+<form action="{% url 'polls:delete_choice' question.id %}" method="post">
+    {% csrf_token %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice_id" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+        <input type="submit" value="Delete">
+</form>
+
+
+

@@ -34,3 +34,21 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def delete_question(request):
+    selected_question = Question.objects.get(pk=request.POST['question_id'])
+    selected_question.delete()
+    return HttpResponseRedirect(reverse('polls:index'))
+
+def delete_choice(request,question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice_id'])
+    except (KeyError, Choice.DoesNotExist):
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        selected_choice.delete()
+        return HttpResponseRedirect(reverse('polls:detail', args=(question.id,)))
