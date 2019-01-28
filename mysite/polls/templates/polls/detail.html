@@ -1,26 +1,25 @@
-<h1>{{ question.question_text }}</h1>
+<h1><a href="{% url 'polls:index' %}">{{ question.question_text }}</a></h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'polls:vote' question.id %}" method="post">
-{% csrf_token %}
-{% for choice in question.choice_set.all %}
-    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-{% endfor %}
-    <input type="submit" value="Vote">
-</form>
-
-<br>
-<p><b>Select choice to delete</b></p>
-<form action="{% url 'polls:delete_choice' question.id %}" method="post">
+{% if question.choice_set.all %}
+    <form action="{% url 'polls:vote' question.id %}" method="post">
     {% csrf_token %}
     {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice_id" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
     {% endfor %}
-        <input type="submit" value="Delete">
-</form>
-
-
+        <br>
+        <input type="submit" value="Vote">
+        <input type="submit" formaction="{% url 'polls:add_choice' question.id%}" value="Add">
+        <input type="submit" name="action" formaction="{% url 'polls:edit_choice' question.id %}" value="Edit">
+        <input type="submit" name="action" formaction="{% url 'polls:delete_choice' question.id %}" value="Delete">
+    </form>
+{% else %}
+    <p>No choice are available.</p>
+    <form action="{% url 'polls:add_choice' question.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="action" value="Add">
+    </form>
+{% endif %}
 

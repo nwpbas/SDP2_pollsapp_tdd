@@ -1,0 +1,56 @@
+<h1>{{ question.question_text }}</h1>
+
+<form action="{% url 'polls:save_choice' question.id %}" method="post" oninput="o1.value = choice_txt.value">
+    {% csrf_token %}
+    {% for choice in question.choice_set.all %}
+        {% if action == "Edit" %}
+            {% if sel_choice_obj.id == choice.id %}
+                <input type="radio" name="choice_id" id="choice{{ forloop.counter }}" value="{{ choice.id }}" checked>
+                <output name="o1" >{{ choice.choice_text }}</output><br>
+            {% else %}
+                <input type="radio" id="choice{{ forloop.counter }}" value="{{ choice.id }}" disabled>
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+            {% endif %}
+        {% elif action == "Add" %}
+            <input type="radio" id="choice{{ forloop.counter }}" value="{{ choice.id }}" disabled>
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+            {% if forloop.last %}
+                <input type="radio" checked>
+                <output name="o1" ></output><br>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if not question.choice_set.all and action == "Add" %}
+        <input type="radio" checked>
+        <output name="o1" ></output><br>
+    {% endif %}
+
+    <br>
+    {{action}} choice :
+    <input type="text" name="choice_txt" value="{{ sel_choice_obj.choice_text }}">
+    <br><br>
+    {% if action == "Edit" %}
+        <input type="submit" name=save_edit value="Save">
+    {% elif action == "Add" %}
+        <input type="submit" name=save_add value="Save">
+    {% endif %}
+</form>
+
+
+{% comment %}
+<!-- <br>
+<p><b>Select choice to delete</b></p>
+<form action="{% url 'polls:delete_choice' question.id %}" method="post">
+    {% csrf_token %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice_id" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+        
+</form> -->
+{% endcomment %}
+
+
+
+

@@ -1,0 +1,15 @@
+<table border="1">
+    <tr>
+        {% for field in choice_fields%}
+            <th>{{field.name}}</th>
+        {% endfor%}
+    </tr>
+    {% for qst in choice_list%}
+    <tr>
+        {% for attr in qst%}
+            <td>{{attr}}</td> 
+        {% endfor%}
+    </tr>
+    {% endfor%}
+    
+</table>

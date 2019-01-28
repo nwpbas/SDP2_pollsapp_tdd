@@ -1,0 +1,38 @@
+<form action="{% url 'polls:save_question' %}" method="post" oninput="o1.value = question_txt.value">
+    {% csrf_token %}
+    {% for question in question_list %}
+        {% if action == "Edit" %}
+            {% if sel_question_obj.id == question.id %}
+                <input type="radio" name="question_id" id="question{{ forloop.counter }}" 
+                value="{{ question.id }}" checked >
+                <output name="o1" >{{ question.question_text }}</output><br>
+            {% else %}
+                <input type="radio" id="question{{ forloop.counter }}" value="{{ question.id }}" disabled>
+                <label for="question{{ forloop.counter }}">{{ question.question_text }}</label><br>
+            {% endif %}
+        {% elif action == "Add" %}
+            <input type="radio" id="question{{ forloop.counter }}" value="{{ question.id }}" disabled>
+            <label for="question{{ forloop.counter }}">{{ question.question_text }}</label><br>
+            {% if forloop.last %} 
+                <input type="radio" checked>
+                <output name="o1" ></output><br>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if not question_list and action == "Add" %}
+        Add question : 
+        <input type="radio" checked>
+        <output name="o1" ></output><br>
+    {% endif %}
+
+    <br>
+    {{action}} question :
+    <input type="text" name="question_txt" value="{{ sel_question_obj.question_text }}">
+    <br><br>
+    {% if action == "Edit" %}
+        <input type="submit" name=save_edit value="Save">
+    {% elif action == "Add" %}
+        <input type="submit" name=save_add value="Save">
+    {% endif %}
+</form>

@@ -1,0 +1,19 @@
+<table border="1">
+    <tr>
+        {% for field in question_fields%}
+            <th>{{field.name}}</th>
+        {% endfor%}
+    </tr>
+    {% for qst in question_list%}
+    <tr>
+        {% for attr in qst%}
+            {% if forloop.counter0 == 1 %}
+                <td><a href="{% url 'polls:show_table_choice' qst.0 %}">{{attr}}</a></td>
+            {% else %}
+                <td>{{attr}}</td>
+            {% endif %}   
+        {% endfor%}
+    </tr>
+    {% endfor%}
+    
+</table>
