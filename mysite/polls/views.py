@@ -12,37 +12,40 @@ def index(request):
     return render(request, 'polls/index.html', context)
 
 def add_question(request):
-    context = {'question_list': Question.objects.all(),
-                "action":"Add"}
-    return render(request, 'polls/add_edit_question.html', context)
+    Question.objects.create(question_text = request.POST['question_txt'], 
+                                pub_date = date.today())
+    return HttpResponseRedirect(reverse('polls:index'))
 
-def edit_delte_question(request):
-    try:
-        selected_question = Question.objects.get(pk=request.POST['question_id'])
-    except (KeyError, Question.DoesNotExist):
+def delete_question(request):
+    if request.POST.getlist('question_id'):
+        selected_question = [ Question.objects.get(pk=q_id) for q_id in request.POST.getlist('question_id')]
+        for sel_q in selected_question:
+            sel_q.delete()
+        return HttpResponseRedirect(reverse('polls:index'))
+    else:
         latest_question_list = Question.objects.order_by('-pub_date')[:5]
         context = {'latest_question_list': latest_question_list,
                     'error_message': "You didn't select a question.",}
         return render(request, 'polls/index.html', context)
+        
+def view_edit(request):
+    if request.POST.getlist('question_id'):
+        selected_question = [ Question.objects.get(pk=q_id) for q_id in request.POST.getlist('question_id')]
+        context = {"sel_question_list": selected_question,}
+        return render(request, 'polls/edit_question.html', context)
     else:
-        if (request.POST['action']) == "Delete":
-            selected_question.delete()
-            return HttpResponseRedirect(reverse('polls:index'))
-        elif (request.POST['action']) == "Edit":
-            context = {'question_list': Question.objects.all(),
-                "sel_question_obj": selected_question,
-                "action":"Edit"}
-            return render(request, 'polls/add_edit_question.html', context)
-
-def save_question(request):
-    if ("save_edit" in request.POST):
-        selected_question = Question.objects.get(pk=request.POST['question_id'])
-        selected_question.question_text = request.POST['question_txt']
-        selected_question.save()
-    elif ("save_add" in request.POST):
-        Question.objects.create(question_text = request.POST['question_txt'], 
-                                pub_date = date.today())
-
+        latest_question_list = Question.objects.order_by('-pub_date')[:5]
+        context = {'latest_question_list': latest_question_list,
+                    'error_message': "You didn't select a question.",}
+        return render(request, 'polls/index.html', context)
+        
+def edit_question(request):
+    for key in request.POST:
+            if 'question' in key:
+                q_id = int(key.split("_")[2])
+                selected_question = Question.objects.get( pk=q_id )
+                selected_question.question_text = request.POST[ key ]
+                selected_question.save()
     return HttpResponseRedirect(reverse('polls:index'))
 
 def show_table_question(request):

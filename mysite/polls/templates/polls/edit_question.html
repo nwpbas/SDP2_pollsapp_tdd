@@ -1,0 +1,12 @@
+<h1>Edit Question</h1>
+
+<form action="{% url 'polls:edit_question' %}" method="post"">
+    {% csrf_token %}
+    {% for question in sel_question_list %}
+        <input type="checkbox" checked disabled>
+        <input type="text" name="question_txt_{{ question.id }}" value="{{ question.question_text }}"><br>
+    {% endfor %}
+    <br><br>
+    <input type="submit" value="Save">
+    <input type="submit" formaction="{% url 'polls:index' %}" value="Cancel">
+</form>

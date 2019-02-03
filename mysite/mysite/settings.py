@@ -25,7 +25,8 @@ SECRET_KEY = 'w^&+d(-g45jh(^=f$t)_)b8(c+lzvmoiw#xi_hs!lt!-ko0ap('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['nwpbas.pythonanywhere.com']
+ALLOWED_HOSTS = ['nwpbas.pythonanywhere.com',
+                '127.0.0.1']
 
 
 # Application definition

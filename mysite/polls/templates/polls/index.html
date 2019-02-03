@@ -1,25 +1,28 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
 {% if latest_question_list %}
-    <form action="{% url 'polls:index' %}" method="post">
+    <form action="" method="post">
         {% csrf_token %}
         {% for question in latest_question_list %}
-            <input type="radio" name="question_id" id="question{{ forloop.counter }}" value="{{ question.id }}">
-            <label for="question{{ forloop.counter }}">
-            <a href="{% url 'polls:detail' question.id %}"><b>{{ question.question_text }}</b></a></label>
-            <br>
+            <input type="checkbox" name="question_id" id="question{{ forloop.counter }}" value="{{ question.id }}">
+            <a href="{% url 'polls:detail' question.id %}"><b>{{ question.question_text }}</b></a><br>
         {% endfor %}
         <br>
-        <input type="submit" formaction="{% url 'polls:add_question' %}" value="Add">
-        <input type="submit" name="action" formaction="{% url 'polls:edit_question' %}" value="Edit">
-        <input type="submit" name="action" formaction="{% url 'polls:delete_question' %}" value="Delete">
+        <input type="submit" formaction="{% url 'polls:view_edit' %}" value="Edit">
+        <input type="submit" formaction="{% url 'polls:delete_question' %}" value="Delete">
         <input type="submit" formaction="{% url 'polls:show_table_question' %}" value="Table">
+    </form>
+    <br>
+    <form action="{% url 'polls:add_question' %}" method="post">
+        {% csrf_token %}
+        Add Question : <input type="text" name="question_txt" value="">
+        <input type="submit" value="Add">
     </form>
 {% else %}
     <p>No polls are available.</p>
     <form action="{% url 'polls:add_question' %}" method="post">
         {% csrf_token %}
-        <input type="submit" name="action" value="Add">
+        Add Question : <input type="text" name="question_txt" value="">
+        <input type="submit" value="Add">
     </form>
 {% endif %}
 
