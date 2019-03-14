@@ -26,7 +26,8 @@ SECRET_KEY = 'w^&+d(-g45jh(^=f$t)_)b8(c+lzvmoiw#xi_hs!lt!-ko0ap('
 DEBUG = True
 
 ALLOWED_HOSTS = ['nwpbas.pythonanywhere.com',
-                '127.0.0.1']
+                '127.0.0.1',
+                'localhost',]
 
 
 # Application definition

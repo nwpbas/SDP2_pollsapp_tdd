@@ -18,6 +18,8 @@ urlpatterns = [
     path('delete', views.delete_question, name='delete_question'),
     path('save_edit', views.edit_question, name='edit_question'),
 
+    path('rsp', views.responsive_show, name='rsp'),
+
     path('<int:question_id>/add', views.add_choice, name='add_choice'),
     path('<int:question_id>/edit', views.edit_delete_choice, name='edit_choice'),
     path('<int:question_id>/delete', views.edit_delete_choice, name='delete_choice'),

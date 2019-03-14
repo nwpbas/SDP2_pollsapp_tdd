@@ -69,6 +69,11 @@ def show_table_choice(request, question_id):
             "choice_list": choice_list,}
     return render(request, 'polls/table_choice.html',context)
 
+def responsive_show(request):
+    question_list = Question.objects.all()
+    context = {"question_list": question_list}
+    return render(request, 'polls/responsive_show.html',context)
+
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     return render(request, 'polls/detail.html', {'question': question})
